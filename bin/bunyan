@@ -734,6 +734,9 @@ function handleLogLine(file, line, opts, stylize) {
         return;
     }
 
+    // because we screwed everything up
+    rec.level = levelFromName[rec.level];
+
     if (!filterRecord(rec, opts))
         return;
 
