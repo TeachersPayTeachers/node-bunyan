@@ -729,6 +729,20 @@ function handleLogLine(file, line, opts, stylize) {
         }
     }
 
+    // No need to display 2 timestamps
+    rec.time = rec.timestamp;
+    delete rec.timestamp;
+
+    // Don't display empty tags
+    if (rec.tags && rec.tags === "[]") {
+        delete rec.tags;
+    }
+
+    // Don't display empty data
+    if (rec.data && rec.data.constructor === Object && Object.keys(rec.data).length === 0) {
+        delete rec.data;
+    }
+
     if (!isValidRecord(rec)) {
         if (!opts.strict) emit(line + '\n');
         return;
@@ -1057,10 +1071,9 @@ function emitRecord(rec, line, opts, stylize) {
                 extras,
                 details));
         else
-            emit(format('%s %s %s:%s%s\n%s',
+            emit(format('%s %s:%s%s\n%s',
                 time,
                 level,
-                nameStr,
                 onelineMsg,
                 extras,
                 details));
